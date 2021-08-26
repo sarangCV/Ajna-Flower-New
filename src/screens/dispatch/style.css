@@ -41,6 +41,9 @@ html, body {
 }
 
 /* DISPATCH ITEM SECTION */
+.dispatch-box-section {
+    margin-bottom: 30px;
+}
 
 .single-box-section {
     margin: 15px 0;
