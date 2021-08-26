@@ -1,0 +1,94 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(221, 221, 221);
+}
+
+.dispatch-container {
+    height: auto;
+    background-color: rgb(221, 221, 221);
+}
+
+.dispatch-content {
+    margin: 20px 0;
+}
+
+.dispatch-date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    /* width: fit-content; */
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+.dispatch-date h5 {
+    margin: 0;
+    padding: 5px;
+    padding-bottom: 8px;
+}
+
+.date-picker {
+    border: none;
+    padding: 5px;
+}
+.react-date-picker__wrapper {
+    border: none
+}
+
+.Showcase .react-component > * {
+    box-shadow: 0 30px 40px 0 rgb(16 36 94 / 20%);
+}
+
+/* DISPATCH ITEM SECTION */
+
+.single-box-section {
+    margin: 15px 0;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.dispatch-id-section {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dispatch-id-section p {
+    margin: 0;
+}
+.dispatch-icon-section {
+    align-items: center;
+    justify-content: space-evenly;
+    display: flex;
+    height: 100%;
+}
+
+.dispatch-icon-section i {
+    cursor: pointer;
+}
+
+.dispatch-footer {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    bottom: 10px;
+}
+
+.button-container button{
+    width: 50%;
+    
+}
+
+.inner-dispatch-box {
+    margin: 10px 0;
+}
+
+@media (max-width: 480px) {
+    .button-container button{
+        width: 100%;
+        
+    }
+}
