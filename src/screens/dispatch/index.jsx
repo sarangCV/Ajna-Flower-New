@@ -21,6 +21,7 @@ const DispatchScreen = () => {
     const [loading, setLoading] = useState(true)
     const [selectedItemValue, setSelectedItemValue] = useState(1);
     const [authToken, setAuthToken] = useState(null)
+    const [categories, setCategories] = useState(null)
     const [dispatchItemsList, setDispatchItemsList] = useState([])    
 
     const [count, setCount] = useState(1)
@@ -36,13 +37,14 @@ const DispatchScreen = () => {
         getItemsList(token).then((res) => {
             const {success, categoriesList} = res;
             if (success) {
-                // setDispatchItemsList(categoriesList)
+                setCategories(categoriesList)
                 let dispatchItems = []
                 categoriesList.map((val) => {
                    dispatchItems = [...dispatchItems,
                        {
                            value: val.name,
-                           label: val.name
+                           label: val.name,
+                           id: val.id
                        }
                    ]
                 })
@@ -53,8 +55,8 @@ const DispatchScreen = () => {
                     items: [
                         {
                             id: categoriesList[0].id,
-                            value_one: categoriesList[0].name,
-                            value_two: 0
+                            name: categoriesList[0].name,
+                            qty: 0
                         }
                     ]
                 }])
@@ -62,11 +64,11 @@ const DispatchScreen = () => {
                 alert(res.message)
             }
         })
-        // console.log(getDispatchItemList);
     }
 
     // ADD BOXES
     const addBoxes = () => {
+        const {id, name} = categories[0]
         setDispatches([
             ...dispatches ,
              {
@@ -74,9 +76,9 @@ const DispatchScreen = () => {
                  id: 'B' + `${dispatches.length+1}`.padStart(3, '0'),
                  items: [
                      {
-                         id: 0,
-                         value_one: 'PLG',
-                         value_two: 0
+                         id: id,
+                         name: name,
+                         qty: 0
                      }
                  ]
             }
@@ -99,17 +101,19 @@ const DispatchScreen = () => {
     const duplicateBoxes = (item) => {
         const currentIndex = dispatches.indexOf(item)
         const lastIndex = dispatches[currentIndex].items.length-1
-        const lastItem = dispatches[currentIndex].items[lastIndex].value_one
-        const lastQty = dispatches[currentIndex].items[lastIndex].value_two
+        const lastItem = dispatches[currentIndex].items[lastIndex].name
+        const lastId = dispatches[currentIndex].items[lastIndex].id
+        const lastQty = dispatches[currentIndex].items[lastIndex].qty
         let duplicateItems = [...dispatches]
         duplicateItems[currentIndex].items = [
             ...duplicateItems[currentIndex].items, {
-                id: duplicateItems[currentIndex].items.length,
-                value_one: lastItem,
-                value_two: lastQty
+                id: lastId,
+                name: lastItem,
+                qty: lastQty
             }
         ]
         setDispatches(duplicateItems);
+        console.log(dispatches);
     }
 
     // STORE ITEM NAME TO THE ARRAY (Eg: VLG)
@@ -118,13 +122,15 @@ const DispatchScreen = () => {
         const currentIndex = dispatches.indexOf(item)
         const dispatchCopy = [...dispatches];
         if(isParent) {
-            dispatchCopy[currentIndex].items[0].value_one = itemVal.value
-            // console.log();
+            dispatchCopy[currentIndex].items[0].id = itemVal.id
+            dispatchCopy[currentIndex].items[0].name = itemVal.value
+            console.log(dispatches);
         }
         else {
             const index = dispatchCopy[currentIndex].items.indexOf(childItem)
-            dispatchCopy[currentIndex].items[index].value_one = itemVal.value;
-           
+            dispatchCopy[currentIndex].items[index].id = itemVal.id;
+            dispatchCopy[currentIndex].items[index].name = itemVal.value;
+            console.log(dispatches);
         }
         setCount(count+1)
     }
@@ -134,13 +140,13 @@ const DispatchScreen = () => {
         const currentIndex = dispatches.indexOf(item)
         const dispatchCopy = [...dispatches];
         if(isParent) {
-            dispatchCopy[currentIndex].items[0].value_two = itemVal.target.value;
+            dispatchCopy[currentIndex].items[0].qty = itemVal.target.value;
             setSelectedItemValue(selectedItemValue + 1);
 
         }
         else {
             const index = dispatchCopy[currentIndex].items.indexOf(childItem)
-            dispatchCopy[currentIndex].items[index].value_two = itemVal.target.value;
+            dispatchCopy[currentIndex].items[index].qty = itemVal.target.value;
             setSelectedItemValue(selectedItemValue + 1);
            
         }
@@ -159,7 +165,7 @@ const DispatchScreen = () => {
         let qty = true;
         dispatches.forEach((ele) => {
             ele.items.forEach((i) => {
-                if (i.value_two == "") {
+                if (i.qty == "") {
                     qty = false;
                 }
             })
@@ -241,7 +247,7 @@ const DispatchScreen = () => {
                                                             options={dispatchItemsList}
                                                             className="dispatch-input-select"
                                                             onChange={ (itemVal, itemIndex, isParent=true ) => {itemNameHandler(item, itemVal, isParent)} }
-                                                            value={{ value: item.items[0].value_one, label: item.items[0].value_one }}
+                                                            value={{ value: item.items[0].name, label: item.items[0].name }}
                                                         />
                                                     </div>
                                                 </div>
@@ -254,7 +260,7 @@ const DispatchScreen = () => {
                                                             aria-label="Small" 
                                                             aria-describedby="inputGroup-sizing-sm"
                                                             onChange={ (itemVal, itemIndex, isParent=true ) => {itemQuantityHandler(item, itemVal, isParent)} }
-                                                            value={item.items[0].value_two}
+                                                            value={item.items[0].qty}
                                                             />
                                                     </div>
                                                 </div>
@@ -281,7 +287,7 @@ const DispatchScreen = () => {
                                                                 options={dispatchItemsList}
                                                                 className="dispatch-input-select"
                                                                 onChange={ (itemVal, itemIndex, isParent=false ) => {itemNameHandler(item, itemVal, isParent,val )} }
-                                                                value={{ value: val.value_one, label: val.value_one }}
+                                                                value={{ value: val.name, label: val.name }}
                                                             />
                                                         </div>
                                                     </div>
@@ -294,7 +300,7 @@ const DispatchScreen = () => {
                                                                 aria-label="Small" 
                                                                 aria-describedby="inputGroup-sizing-sm"
                                                                 onChange={ (itemVal, itemIndex, isParent=false ) => {itemQuantityHandler(item, itemVal, isParent,val )} }
-                                                                value={val.value_two}
+                                                                value={val.qty}
                                                                 />
                                                         </div>
                                                     </div>
