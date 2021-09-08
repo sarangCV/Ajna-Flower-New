@@ -59,7 +59,7 @@ const AddCustomer = () => {
                                     <p className="add-customer-label">Customer name</p>
                                     <input 
                                         type="text" 
-                                        placeholder="Enter qty" 
+                                        placeholder="Enter name" 
                                         className="form-control" 
                                         aria-label="Small"
                                         aria-describedby="inputGroup-sizing-sm"
@@ -75,7 +75,7 @@ const AddCustomer = () => {
                                     <p className="add-customer-label">Customer number</p>
                                     <input 
                                         type="text" 
-                                        placeholder="Enter qty" 
+                                        placeholder="Enter number" 
                                         className="form-control" 
                                         aria-label="Small" 
                                         aria-describedby="inputGroup-sizing-sm"
@@ -91,7 +91,7 @@ const AddCustomer = () => {
                                     <p className="add-customer-label">Customer city</p>
                                     <input 
                                         type="text" 
-                                        placeholder="Enter qty" 
+                                        placeholder="Enter city" 
                                         className="form-control" 
                                         aria-label="Small" 
                                         aria-describedby="inputGroup-sizing-sm"
@@ -107,7 +107,7 @@ const AddCustomer = () => {
                                     <p className="add-customer-label">Customer remark</p>
                                     <input 
                                         type="text" 
-                                        placeholder="Enter qty" 
+                                        placeholder="Enter remarks" 
                                         className="form-control" 
                                         aria-label="Small" 
                                         aria-describedby="inputGroup-sizing-sm"
