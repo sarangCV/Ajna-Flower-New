@@ -25,7 +25,7 @@ export const addClients = async (token, clientDetails) => {
 
     };
     return await fetch(URL, requestOptions).then((response) => response.json()).then((resData) => {
-        console.log(resData)
+        console.log(requestOptions.body)
         return resData;
     });
 };

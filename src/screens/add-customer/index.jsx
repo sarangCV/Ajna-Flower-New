@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { addClients } from '../../api/clients';
+import { authTokenKey } from '../../configuration';
 import './style.css';
 
 const AddCustomer = () => {
 
     const [customerDetails, setCustomerDetails] = useState(
         {
-            customerName: null,
-            customerNumber: null,
-            customerCity: null,
+            clientName: null,
+            clientNumber: null,
+            clientCity: null,
             customerRemark: null
 
         }
@@ -21,9 +22,9 @@ const AddCustomer = () => {
     }, [])
 
     // Fetching Initial data for the screen
-    const getInitialData = () => {
-
-        
+    const getInitialData = async () => {
+        const token = await sessionStorage.getItem(authTokenKey);
+        await setAuthToken(token);
     }
 
     const validateCustomerData = (data) => {
@@ -36,6 +37,10 @@ const AddCustomer = () => {
         const isNull = validateCustomerData(customerDetails)
         if(!isNull) {
             addClients(authToken, customerDetails)
+            .then((resData) => {
+                const {success, message} = resData;
+                alert(message);
+            })
         }
         else {
             alert('Please enter any details')
@@ -60,7 +65,7 @@ const AddCustomer = () => {
                                         aria-describedby="inputGroup-sizing-sm"
                                         onChange={(itemVal) => setCustomerDetails({
                                             ...customerDetails,
-                                            customerName: itemVal.target.value
+                                            clientName: itemVal.target.value
                                         })}
                                         />
                                 </div>
@@ -76,7 +81,7 @@ const AddCustomer = () => {
                                         aria-describedby="inputGroup-sizing-sm"
                                         onChange={(itemVal) => setCustomerDetails({
                                             ...customerDetails,
-                                            customerNumber: itemVal.target.value
+                                            clientNumber: itemVal.target.value
                                         })}
                                         />
                                 </div>
@@ -92,7 +97,7 @@ const AddCustomer = () => {
                                         aria-describedby="inputGroup-sizing-sm"
                                         onChange={(itemVal) => setCustomerDetails({
                                             ...customerDetails,
-                                            customerCity: itemVal.target.value
+                                            clientCity: itemVal.target.value
                                         })}
                                         />
                                 </div>
