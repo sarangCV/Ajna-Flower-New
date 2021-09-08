@@ -49,6 +49,7 @@ html, body {
     margin: 15px 0;
     background-color: #fff;
     padding: 10px;
+    padding-top: 20px;
     border-radius: 5px;
 }
 
@@ -73,6 +74,10 @@ html, body {
     cursor: pointer;
 }
 
+.dispatch-icon-section p {
+    margin: 0;
+}
+
 .dispatch-footer {
     position: fixed;
     width: 100%;
@@ -93,5 +98,17 @@ html, body {
     .button-container button{
         width: 100%;
         
+    }
+
+    .single-box-section {
+        padding: 10px 20px;
+    }
+
+    .dispatch-icon-section {
+        justify-content: space-between;
+    }
+
+    .dispatch-icon-section p {
+        display: none;
     }
 }

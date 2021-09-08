@@ -5,6 +5,8 @@ import {icon} from '../../assests/icons/index'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { useHistory } from 'react-router-dom'
+import { validateUser } from '../../api/auth'
+import { authDataKey, authTokenKey } from '../../configuration'
 
 
 const Login = () => {
@@ -18,7 +20,22 @@ const Login = () => {
 
 
     const onSubmit = async (e) => {
-        history.push('/add-dispatch')
+        // history.push('/add-dispatch')
+        e.preventDefault();
+        await setIsLoading(true)
+        await validateUser(email, password)
+        .then((res) => {
+            const {success, userData} = res;
+            if(success) {
+                window.sessionStorage.setItem(authTokenKey, userData.userToken)
+                window.sessionStorage.setItem(authDataKey, userData)
+                history.push('/add-dispatch')
+            }
+            else {
+                setError(res.message)
+            }
+        })
+        .then(setIsLoading(false))
     }
 
     return (

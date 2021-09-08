@@ -1,0 +1,27 @@
+.add-customer-container {
+    height: auto;
+    background-color: rgb(221, 221, 221);
+}
+
+.add-customer-title {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.customer-details-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.add-customer-detail {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
+}
+
+.add-customer-detail .add-customer-label {
+    margin-bottom: 1rem !important;
+    font-weight: 500;
+}
