@@ -1,131 +1,146 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import './style.css';
 import Select from 'react-select'
+import { getItemsList } from '../../api/items';
+import { authTokenKey } from '../../configuration';
+import { getDispatchDetails } from '../../api/dispatch';
+import { getClientsList } from '../../api/clients';
+import Navbar from '../../components/nav-bar';
 
 
 const AssignToCustomer = () => {
 
-    const [dispatches, setDispatches] = useState([
-        {
-            id: "B001",
-            index:0,
-            items: [
-                {
-                    id: 0,
-                    value_one: "VLG",
-                    value_two: 100
-                },
-                {
-                    id: 1,
-                    value_one: "PLG",
-                    value_two: 200
-                },
-                {
-                    id: 2,
-                    value_one: "WLG",
-                    value_two: 300
-                },
-            ]
-        },
-        {
-            id: "B002",
-            index:0,
-            items: [
-                {
-                    id: 0,
-                    value_one: "VLG",
-                    value_two: 100
-                }
-            ]
-        },
-        {
-            id: "B003",
-            index:0,
-            items: [
-                {
-                    id: 0,
-                    value_one: "PLG",
-                    value_two: 400
-                },
-                {
-                    id: 1,
-                    value_one: "VLG",
-                    value_two: 500
-                }
-            ]
-        }
-    ])
+    const params = useParams();
 
-    const customers = [
-        { value: 'Customer-1', label: 'Customer-1' },
-        { value: 'Customer-2', label: 'Customer-2' },
-        { value: 'Customer-3', label: 'Customer-3' },
-    ]
+    const [authToken, setAuthToken] = useState(null);
+    const [dispatches, setDispatches] = useState(null);
+    const [clientsList, setClientsList] = useState(null);
 
+
+    useEffect( async () => {
+      await getInitialData();
+    }, [])
+
+    const getInitialData = async () => {
+        const token = sessionStorage.getItem(authTokenKey);
+        setAuthToken(token);
+        await getDispatchDetails (token, params.id)
+        .then((res) => {
+            const { data, success } = res;
+            if(success) {
+                setDispatches(data.dispatches);
+                // console.log(data.dispatches);
+            }
+            else {
+                console.log(res.message);
+            }
+            
+        })
+        await getClients(token)
+        // console.log('TOKEN IS::', token);
+    }
+
+    const getClients = async (token) => {
+        // console.log('TOKEN IS::', token);
+        await getClientsList(token)
+        .then((res) => {
+            const { clientsList, success } = res;
+            if(success) {
+                let clients = []
+                clientsList.map((val) => {
+                    clients = [...clients,
+                       {
+                           value: val.name,
+                           label: val.name,
+                           id: val.id
+                       }
+                   ]
+                })
+                setClientsList(clients);
+                console.log(clients);
+                // console.log(clientsList);
+            }
+        })
+    }
+
+    const onSubmit = () => {
+        console.log("CLIENT LIST::", clientsList);
+        console.log("DISPATCHES::", dispatches);
+    }
+    
     return(
         <div className="assign-to-customer-container">
+            <Navbar title='Assign boxes to customer'/>
             <div className="container">
                 <div className="assign-to-customer-content">
-                    <h2 className="assign-to-customer-title">Assign boxes to customer</h2>
                     <div className="dispatch-box-section">
-                            {dispatches.map((item) => {
+                            {dispatches && dispatches.map((item) => {
                                 return(
                                     <div className="single-box-section" key={item.id}>
                                         <div className="row">
                                             <div className="col-2">
                                                 <p className="assign-customer-label">ID</p>
                                             </div>
-                                            <div className="col-3">
-                                                <p className="assign-customer-label">Item Name</p>
+                                            <div className="col-4">
+                                                <p className="assign-customer-label">Box</p>
                                             </div>
-                                            <div className="col-2">
-                                                <p className="assign-customer-label">Item Qty</p>
-                                            </div>
-                                            <div className="col-5">
+                                           
+                                            <div className="col-6">
                                                 <p className="assign-customer-label">Select a customer</p>
                                             </div>
                                         </div>
                                         <div className="row inner-dispatch-box">
-                                                <div className="col-2">
-                                                    <div className="dispatch-id-section assign-customer-id">
-                                                        <p>{item.id}</p>
-                                                    </div>
+                                            <div className="col-2">
+                                                <div className="dispatch-id-section assign-customer-id">
+                                                    <p>{item.box_no}</p>
                                                 </div>
-                                                <div className="col-3">
-                                                    <div className="dispatch-item-name-section assign-customer-item-name">
-                                                        {item.items.map((val) => {
-                                                            // console.log("Item Names:---", val.value_one)
-                                                            return(
-                                                                <p>{val.value_one}</p>
-                                                            )
-                                                        })}
-                                                    </div>
+                                            </div>
+                                            <div className="col-4">
+                                                <div className="dispatch-item-name-section assign-customer-item-name">
+                                                    {item.items.map((val) => {
+                                                        // console.log("Item Names:---", val.value_one)
+                                                        return(
+                                                            <p>{val}</p>
+                                                        )
+                                                    })}
                                                 </div>
-                                                <div className="col-2">
-                                                    <div className="dispatch-item-quantity-section assign-customer-item-name">
-                                                        {item.items.map((val) => {
-                                                                // console.log("Item Names:---", val.value_one)
-                                                                return(
-                                                                    <p>{val.value_two}</p>
-                                                                )
-                                                            })}
-                                                    </div>
+                                            </div>
+                                            
+                                            <div className="col-6">
+                                                <div className="assign-customer-list ">
+                                                <Select 
+                                                        options={clientsList}
+                                                        className="dispatch-input-select"                                                            
+                                                    />
                                                 </div>
-                                                <div className="col-5">
-                                                    <div className="assign-customer-list ">
-                                                    <Select 
-                                                            options={customers}
-                                                            className="dispatch-input-select"                                                            
-                                                        />
-                                                    </div>
-                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 )
                             })}
                            
                         </div>
+                </div>
+                <div className="dispatch-footer">
+                    <div className="button-container">
+                        <div className="container">
+                            <div className="row d-flex justify-content-center">
+                                <div className="col-12 d-flex flex-column align-items-center">
+                                    <button 
+                                        type="button" 
+                                        className="btn btn-secondary " 
+                                        onClick={onSubmit}
+                                        >
+                                        <i className="fas fa-check" style={{ marginRight: 10 }}></i>
+                                        Submit
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
         </div>

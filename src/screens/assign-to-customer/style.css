@@ -31,6 +31,9 @@
 
 @media (max-width: 480px) {
     .assign-customer-list {
-        padding: 0;
+        padding: 0 !important;
+    }
+    .assign-customer-item-name {
+        align-items: flex-start;
     }
 }

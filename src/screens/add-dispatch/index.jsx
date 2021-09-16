@@ -10,10 +10,12 @@ import { getItemsList } from '../../api/items';
 import moment from 'moment';
 import { dispatchData } from '../../api/dispatch';
 
+import Navbar from '../../components/nav-bar';
+
 moment.locale('en-IN');
 
 
-const DispatchScreen = () => {
+const AddDispatchScreen = () => {
 
     const history = useHistory();
     const [date, setDate] = useState(new Date());
@@ -212,6 +214,7 @@ const DispatchScreen = () => {
 
     return(
         <div className="dispatch-container">
+            <Navbar title='Add a dispatch'/>
             <div className="container">
                 <div className="dispatch-content">
                     <div className="row">
@@ -339,4 +342,4 @@ const DispatchScreen = () => {
     )
 }
 
-export default DispatchScreen;
+export default AddDispatchScreen;
