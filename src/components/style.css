@@ -1,8 +1,12 @@
 .navbar-container {
     background-color: rgb(117, 191, 191);
-    padding: 10px 0;
+    padding: 15px 0;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 30px;
+    width: 100%;
+}
+.navbar-container h2 {
+    margin: 0;
 }

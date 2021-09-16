@@ -4,7 +4,7 @@ import './style.css';
 import Select from 'react-select'
 import { getItemsList } from '../../api/items';
 import { authTokenKey } from '../../configuration';
-import { getDispatchDetails } from '../../api/dispatch';
+import { getDispatchDetails, getDispatchItem } from '../../api/dispatch';
 import { getClientsList } from '../../api/clients';
 import Navbar from '../../components/nav-bar';
 
@@ -17,6 +17,9 @@ const AssignToCustomer = () => {
     const [dispatches, setDispatches] = useState(null);
     const [clientsList, setClientsList] = useState(null);
 
+    const [selectedItems, setSelectedItems] = useState([])
+    const [selectedClient, setSelectedClient] = useState(null)
+
 
     useEffect( async () => {
       await getInitialData();
@@ -25,12 +28,12 @@ const AssignToCustomer = () => {
     const getInitialData = async () => {
         const token = sessionStorage.getItem(authTokenKey);
         setAuthToken(token);
-        await getDispatchDetails (token, params.id)
+        await getDispatchItem (params.id, token)
         .then((res) => {
-            const { data, success } = res;
+            const { clientsList, success, message } = res;
             if(success) {
-                setDispatches(data.dispatches);
-                // console.log(data.dispatches);
+                setDispatches(clientsList);
+                // console.log(res);
             }
             else {
                 console.log(res.message);
@@ -41,6 +44,7 @@ const AssignToCustomer = () => {
         // console.log('TOKEN IS::', token);
     }
 
+    // Runs initally to obtain clients
     const getClients = async (token) => {
         // console.log('TOKEN IS::', token);
         await getClientsList(token)
@@ -64,63 +68,92 @@ const AssignToCustomer = () => {
         })
     }
 
+    // Runs when choosing a client
+    const clientHandler = (item) => {
+        setSelectedClient(item.id)
+    }
+
+    // Runs when an item selected
+    const toggleItem = (id) => {
+        let selectedItemsCopy = [...selectedItems]
+        if(!selectedItemsCopy.includes(id)) {
+            setSelectedItems([
+                ...selectedItemsCopy,
+                id
+            ]);
+        }
+        else {
+            const index = selectedItemsCopy.indexOf(id);
+            selectedItemsCopy.splice(index, 1);
+            setSelectedItems(selectedItemsCopy);
+        }
+    }
+
     const onSubmit = () => {
         console.log("CLIENT LIST::", clientsList);
         console.log("DISPATCHES::", dispatches);
+        console.log('SELECTED ITEMS', selectedItems);
+        console.log('SELECTED CLIENT', selectedClient);
     }
     
     return(
         <div className="assign-to-customer-container">
             <Navbar title='Assign boxes to customer'/>
             <div className="container">
+                <div className="dispatches-option-sec">
+                    <div className="dispatches-option-text">
+                        <p>Choose a client</p>
+                    </div>
+                    <div className="dispatches-option-menu">
+                        <Select 
+                            options={clientsList}
+                            className="dispatches-input-select" 
+                            onChange={ (item, index) => clientHandler(item) }
+                            // value={{ value: currentOption, label: currentOption }}                                                   
+                        />
+                    </div>
+                    
+                </div>
                 <div className="assign-to-customer-content">
                     <div className="dispatch-box-section">
-                            {dispatches && dispatches.map((item) => {
-                                return(
-                                    <div className="single-box-section" key={item.id}>
-                                        <div className="row">
-                                            <div className="col-2">
-                                                <p className="assign-customer-label">ID</p>
-                                            </div>
-                                            <div className="col-4">
-                                                <p className="assign-customer-label">Box</p>
-                                            </div>
-                                           
-                                            <div className="col-6">
-                                                <p className="assign-customer-label">Select a customer</p>
+                        <h3>Choose boxes to assign</h3>
+                        {dispatches && dispatches.map((item, index) => {
+                            return(
+                                <div className="single-box-section" 
+                                    key={item.index}
+                                    onClick={() => toggleItem(item.id)} 
+                                    style={{ backgroundColor: selectedItems.includes(item.id) ? 'rgb(56, 56, 56)' : '#fff' }}
+                                    >
+                                    <div className="row">
+                                        <div className="col-3">
+                                            <p className="assign-customer-label" 
+                                                style={{ color: selectedItems.includes(item.id) ? '#fff' : '#000' }}>ID</p>
+                                        </div>
+                                        <div className="col-9">
+                                            <p className="assign-customer-label"
+                                                style={{ color: selectedItems.includes(item.id) ? '#fff' : '#000' }}>Boxes</p>
+                                        </div>
+                                    </div>
+                                    <div className="row inner-dispatch-box">
+                                        <div className="col-3">
+                                            <div className="dispatch-id-section assign-customer-id">
+                                                <p style={{ color: selectedItems.includes(item.id) ? '#fff' : '#000' }}>{item.box_no}</p>
                                             </div>
                                         </div>
-                                        <div className="row inner-dispatch-box">
-                                            <div className="col-2">
-                                                <div className="dispatch-id-section assign-customer-id">
-                                                    <p>{item.box_no}</p>
-                                                </div>
-                                            </div>
-                                            <div className="col-4">
-                                                <div className="dispatch-item-name-section assign-customer-item-name">
-                                                    {item.items.map((val) => {
-                                                        // console.log("Item Names:---", val.value_one)
-                                                        return(
-                                                            <p>{val}</p>
-                                                        )
-                                                    })}
-                                                </div>
-                                            </div>
-                                            
-                                            <div className="col-6">
-                                                <div className="assign-customer-list ">
-                                                <Select 
-                                                        options={clientsList}
-                                                        className="dispatch-input-select"                                                            
-                                                    />
-                                                </div>
+                                        <div className="col-9">
+                                            <div className="dispatch-item-name-section assign-customer-item-name">
+                                                {item.items.map((val) => {
+                                                    return(
+                                                        <p style={{ color: selectedItems.includes(item.id) ? '#fff' : '#000' }}>{val}</p>
+                                                    )
+                                                })}
                                             </div>
                                         </div>
                                     </div>
-                                )
-                            })}
-                           
-                        </div>
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
                 <div className="dispatch-footer">
                     <div className="button-container">
