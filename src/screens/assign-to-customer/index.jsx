@@ -7,6 +7,9 @@ import { authTokenKey } from '../../configuration';
 import { getDispatchDetails, getDispatchItem } from '../../api/dispatch';
 import { getClientsList } from '../../api/clients';
 import Navbar from '../../components/nav-bar';
+import { assignItems } from '../../api/assign-items';
+
+import Modal from '../../components/modal';
 
 
 const AssignToCustomer = () => {
@@ -16,9 +19,13 @@ const AssignToCustomer = () => {
     const [authToken, setAuthToken] = useState(null);
     const [dispatches, setDispatches] = useState(null);
     const [clientsList, setClientsList] = useState(null);
+    const [dispatchId, setDispatchId] = useState(null);
 
     const [selectedItems, setSelectedItems] = useState([])
     const [selectedClient, setSelectedClient] = useState(null)
+
+    const [isModal, setIsModal] = useState(false);
+    const [alertMessage, setAlertMessage] = useState(null)
 
 
     useEffect( async () => {
@@ -28,6 +35,7 @@ const AssignToCustomer = () => {
     const getInitialData = async () => {
         const token = sessionStorage.getItem(authTokenKey);
         setAuthToken(token);
+        setDispatchId(params.id);
         await getDispatchItem (params.id, token)
         .then((res) => {
             const { clientsList, success, message } = res;
@@ -89,11 +97,33 @@ const AssignToCustomer = () => {
         }
     }
 
+    const assignItemsAlert = () => {
+        // const selectedClientName = clientsList.find(x => x.id === selectedClient).name;
+        // return `${selectedItems.length}Boxes to ${selectedClientName}`
+        return 'Hello'
+    }
     const onSubmit = () => {
-        console.log("CLIENT LIST::", clientsList);
-        console.log("DISPATCHES::", dispatches);
-        console.log('SELECTED ITEMS', selectedItems);
-        console.log('SELECTED CLIENT', selectedClient);
+        // console.log("CLIENT LIST::", clientsList);
+        // console.log("DISPATCHES::", dispatches);
+        // console.log('SELECTED ITEMS', selectedItems);
+        // console.log('SELECTED CLIENT', selectedClient);
+        // console.log("SUBMIT DATA::", dispatchId, selectedClient, selectedItems );
+
+        // const selectedClientName = clientsList.find(x => x.id === selectedClient);
+        // setAlertMessage(`${selectedItems.length}Boxes to ${selectedClientName}`)
+
+        // console.log(clientsList);
+
+        assignItems(dispatchId, selectedClient, selectedItems, authToken)
+        .then((res) => {
+            const { success, message } = res;
+            if(success) {
+                alert(message);
+            }
+            else {
+                alert(message);
+            }
+        })
     }
     
     return(
@@ -119,7 +149,7 @@ const AssignToCustomer = () => {
                         <h3>Choose boxes to assign</h3>
                         {dispatches && dispatches.map((item, index) => {
                             return(
-                                <div className="single-box-section" 
+                                <div className="single-box-section assign-items-single" 
                                     key={item.index}
                                     onClick={() => toggleItem(item.id)} 
                                     style={{ backgroundColor: selectedItems.includes(item.id) ? 'rgb(56, 56, 56)' : '#fff' }}
@@ -155,6 +185,47 @@ const AssignToCustomer = () => {
                         })}
                     </div>
                 </div>
+                {/* <div className="assign-to-customer-content">
+                    <div className="dispatch-box-section">
+                        <h3>Assigned boxes</h3>
+                        {dispatches && dispatches.map((item, index) => {
+                            return(
+                                <div className="single-box-section assigned-items-single" 
+                                    key={item.index}
+                                    onClick={() => toggleItem(item.id)} 
+                                    style={{ backgroundColor: selectedItems.includes(item.id) ? 'rgb(56, 56, 56)' : '#fff' }}
+                                    >
+                                    <div className="row">
+                                        <div className="col-3">
+                                            <p className="assign-customer-label" 
+                                                style={{ color: selectedItems.includes(item.id) ? '#fff' : '#000' }}>ID</p>
+                                        </div>
+                                        <div className="col-9">
+                                            <p className="assign-customer-label"
+                                                style={{ color: selectedItems.includes(item.id) ? '#fff' : '#000' }}>Boxes</p>
+                                        </div>
+                                    </div>
+                                    <div className="row inner-dispatch-box">
+                                        <div className="col-3">
+                                            <div className="dispatch-id-section assign-customer-id">
+                                                <p style={{ color: selectedItems.includes(item.id) ? '#fff' : '#000' }}>{item.box_no}</p>
+                                            </div>
+                                        </div>
+                                        <div className="col-9">
+                                            <div className="dispatch-item-name-section assign-customer-item-name">
+                                                {item.items.map((val) => {
+                                                    return(
+                                                        <p style={{ color: selectedItems.includes(item.id) ? '#fff' : '#000' }}>{val}</p>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div> */}
                 <div className="dispatch-footer">
                     <div className="button-container">
                         <div className="container">
@@ -176,6 +247,7 @@ const AssignToCustomer = () => {
                     </div>
                 </div>
             </div>
+            {/* {isModal && <Modal setOpenModal={setIsModal} modalConfirm={onSubmit} description={alertMessage}/>} */}
         </div>
     )
 }

@@ -70,6 +70,12 @@
 }
 
 @media (max-width: 480px) {
+    .dispatches-option-sec {
+        padding: 20px 10px;
+    }
+    .dispatches-assign-btn {
+        padding: 10px !important;
+    }
     .dispatch-single-desk {
         padding: 10px 25px;
         flex-direction: column;

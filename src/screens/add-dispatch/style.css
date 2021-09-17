@@ -111,4 +111,7 @@ html, body {
     .dispatch-icon-section p {
         display: none;
     }
+    .inner-dispatch-box {
+        margin: 0;
+    }
 }

@@ -1,6 +1,7 @@
 .assign-to-customer-container {
     height: auto;
     background-color: rgb(221, 221, 221);
+    position: relative;
 }
 
 .assign-customer-id {
@@ -30,18 +31,11 @@
     margin: 20px 0;
 }
 
-.single-box-section {
+.assign-items-single {
     cursor: pointer;
 }
 
-.single-box-section:hover {
-    background-color: #6c757d !important;
-    transition: 0.3s;
-}
 
-.single-box-section:hover p {
-    color: #fff !important;
-}
 
 @media (max-width: 480px) {
     .assign-customer-list {
@@ -50,7 +44,24 @@
     .assign-customer-item-name {
         align-items: center;
     }
-    .single-box-section:hover {
+    .assign-customer-item-name p:last-child {
+        margin-bottom: 0;
+    }
+    .assign-to-customer-content {
+        margin-bottom: 60px;
+    }
+    /* .assign-items-single:hover {
         background-color: none !important;
+    } */
+}
+
+@media (min-width: 900px) {
+    .assign-items-single:hover {
+        background-color: #6c757d !important;
+        transition: 0.3s;
+    }
+
+    .assign-items-single:hover p {
+        color: #fff !important;
     }
 }

@@ -241,9 +241,12 @@ const AssignPrice = (props) => {
                 await assignCalculatedPrice(selectedClient, itemsPricing, authToken).then((res) => {
                     const {success, message} = res;
                     if (success) {
-                        alert(message)
+                        alert(message);
+                        setAssignedItemsData([]);
+
                     } else {
-                        alert(message)
+                        alert(message);
+                        setAssignedItemsData([]);
                     }
                 })
         } else {

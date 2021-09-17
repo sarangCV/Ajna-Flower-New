@@ -1,19 +1,19 @@
 .assign-price-select-sec, .assign-price-option-text, .assign-price-option-menu, .assign-price-find-btn {
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
 }
 .assign-price-option-text {
     flex: 1;
 }
 
 .assign-price-option-menu {
-    flex: 2;
+    flex: 1;
 }
 .assign-price-select-sec {
     flex: 1;
     justify-content: space-between;
     align-items: center;
-    padding-right: 230px;
+    padding-right: 250px;
 }
 .assign-price-find-btn {
     flex: 1;

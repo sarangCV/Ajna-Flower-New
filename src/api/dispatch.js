@@ -31,18 +31,18 @@ export const getDispatches = async (token) => {
 };
 
 
-export const assignItems = async (dispatchId, clientId, assignedItems, token) => {
-    const URL = `${baseUrl}/master/assign-item`;
-    const requestOptions = {
-        method: 'post',
-        headers: {Accept: 'application/json', 'Content-Type': 'application/json', token},
-        body: JSON.stringify({dispatchId, clientId, assignedItems})
-    };
-    return await fetch(URL, requestOptions).then((response) => response.json()).then((resData) => {
-        console.log(resData)
-        return resData;
-    });
-};
+// export const assignItems = async (dispatchId, clientId, assignedItems, token) => {
+//     const URL = `${baseUrl}/master/assign-item`;
+//     const requestOptions = {
+//         method: 'post',
+//         headers: {Accept: 'application/json', 'Content-Type': 'application/json', token},
+//         body: JSON.stringify({dispatchId, clientId, assignedItems})
+//     };
+//     return await fetch(URL, requestOptions).then((response) => response.json()).then((resData) => {
+//         console.log(resData)
+//         return resData;
+//     });
+// };
 
 /* ----------------------------------------- *
  *GET DISPATCH ITEM (NOT ASSIGNED TO CLIENTS)*

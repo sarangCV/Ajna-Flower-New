@@ -29,7 +29,7 @@ const Login = () => {
             if(success) {
                 window.sessionStorage.setItem(authTokenKey, userData.userToken)
                 window.sessionStorage.setItem(authDataKey, userData)
-                history.push('/add-dispatch')
+                history.push('/dashboard')
             }
             else {
                 setError(res.message)
