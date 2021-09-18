@@ -25,7 +25,9 @@
 .assign-customer-list {
     padding: 0 90px;
 }
-
+.assign-to-customer-content {
+    padding-bottom: 35px;
+}
 .assign-to-customer-content .assign-to-customer-title {
     text-align: center;
     margin: 20px 0;
@@ -33,8 +35,15 @@
 
 .assign-items-single {
     cursor: pointer;
+    padding: 10px 0 0 0;
 }
-
+.assigned-items-single {
+    border: 1px solid #0D6EFD;
+    background-color: #5E9EFE;
+}
+.assigned-items-single p {
+    color: #fff;
+}
 
 
 @media (max-width: 480px) {
@@ -48,7 +57,7 @@
         margin-bottom: 0;
     }
     .assign-to-customer-content {
-        margin-bottom: 60px;
+        padding-bottom: 35px;
     }
     /* .assign-items-single:hover {
         background-color: none !important;

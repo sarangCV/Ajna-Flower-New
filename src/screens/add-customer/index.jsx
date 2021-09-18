@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { addClients } from '../../api/clients';
+import Navbar from '../../components/nav-bar';
 import { authTokenKey } from '../../configuration';
 import './style.css';
 
@@ -7,10 +8,10 @@ const AddCustomer = () => {
 
     const [customerDetails, setCustomerDetails] = useState(
         {
-            clientName: null,
-            clientNumber: null,
-            clientCity: null,
-            customerRemark: null
+            clientName: '',
+            clientNumber: '',
+            clientCity: '',
+            customerRemark: ''
 
         }
     );
@@ -28,18 +29,25 @@ const AddCustomer = () => {
     }
 
     const validateCustomerData = (data) => {
-        let isNull = Object.values(data).every(o => o === null);
+        let isNull = Object.values(data).every(o => o === '');
         return isNull;
     }
 
     const submit = () => {
-        // console.log(customerDetails);
+        console.log(customerDetails);
         const isNull = validateCustomerData(customerDetails)
+        console.log(isNull);
         if(!isNull) {
             addClients(authToken, customerDetails)
             .then((resData) => {
                 const {success, message} = resData;
                 alert(message);
+                setCustomerDetails({
+                    clientName: '',
+                    clientNumber: '',
+                    clientCity: '',
+                    customerRemark: ''
+                });
             })
         }
         else {
@@ -49,9 +57,9 @@ const AddCustomer = () => {
 
     return(
         <div className="add-customer-container">
+            <Navbar title="Add a customer"/>
             <div className="container">
                 <div className="add-customer-content">
-                    <h2 className="add-customer-title">Add a customer</h2>
                     <div className="customer-details-section">
                         <div className="row">
                             <div className="col-lg-3 col-sm-6">
@@ -67,6 +75,7 @@ const AddCustomer = () => {
                                             ...customerDetails,
                                             clientName: itemVal.target.value
                                         })}
+                                        value={customerDetails.clientName}
                                         />
                                 </div>
                             </div>
@@ -83,6 +92,7 @@ const AddCustomer = () => {
                                             ...customerDetails,
                                             clientNumber: itemVal.target.value
                                         })}
+                                        value={customerDetails.clientNumber}
                                         />
                                 </div>
                             </div>
@@ -99,6 +109,7 @@ const AddCustomer = () => {
                                             ...customerDetails,
                                             clientCity: itemVal.target.value
                                         })}
+                                        value={customerDetails.clientCity}
                                         />
                                 </div>
                             </div>
@@ -115,6 +126,7 @@ const AddCustomer = () => {
                                             ...customerDetails,
                                             customerRemark: itemVal.target.value
                                         })}
+                                        value={customerDetails.customerRemark}
                                         />
                                 </div>
                             </div>

@@ -1,3 +1,6 @@
+.assign-to-customer-container {
+    height: 100vh;
+}
 .assign-price-select-sec, .assign-price-option-text, .assign-price-option-menu, .assign-price-find-btn {
     display: flex;
     /* justify-content: center; */

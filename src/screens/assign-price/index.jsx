@@ -11,13 +11,16 @@ import moment from 'moment';
 import { assignedItems } from '../../api/assign-items';
 import { assignPrice } from '../../api/assign-price';
 import { assignCalculatedPrice } from '../../api/calculated-price';
+import Loader from '../../components/loader';
 
 
 
 const AssignPrice = (props) => {
 
     const params = useParams();
+    const history = useHistory();
 
+    const [loading, setLoading] = useState(true)
     const [authToken, setAuthToken] = useState(null);
     const [dispatchesId, setDispatchesId] = useState(null);
     const [assignedDate, setAssignedDate] = useState(null)
@@ -42,12 +45,14 @@ const AssignPrice = (props) => {
 
     // Initial loading function
     const getInitialData = async () => {
+
         const token = sessionStorage.getItem(authTokenKey);
         setAuthToken(token);
         await getClientsList(token)
         .then((res) => {
             const { clientsList, success } = res;
             if(success) {
+                setLoading(false);
                 let clients = []
                 clientsList.map((val) => {
                     clients = [...clients,
@@ -80,7 +85,7 @@ const AssignPrice = (props) => {
 
     // Runs when find items button is tapped
     const onFindItems = async (id, assigned, time) => {
-        // console.log("FIND ITEMS::", assignedItemsData);
+        setLoading(true);
         setTotalPrice(null);
         setisSubmitVisible(false);
         await assignedItems(findItemData, authToken)
@@ -103,11 +108,13 @@ const AssignPrice = (props) => {
                         total: null
                     }];
                     setAssignedItemsData(filtered);
+                    setLoading(false);
                     }
                }
                else {
                    alert('No data')
-                   setAssignedItemsData([])
+                   setAssignedItemsData([]);
+                   setLoading(false);
                }
            }
            else {
@@ -227,6 +234,7 @@ const AssignPrice = (props) => {
 
     // Runs on submiting the price
     const onSubmit = async () => {
+        setLoading(true);
        if (assignedItemsData.length !== 0) {
                 let itemsPricing = [];
                 assignedItemsData.forEach(element => {
@@ -241,66 +249,72 @@ const AssignPrice = (props) => {
                 await assignCalculatedPrice(selectedClient, itemsPricing, authToken).then((res) => {
                     const {success, message} = res;
                     if (success) {
+                        setLoading(false);
                         alert(message);
                         setAssignedItemsData([]);
+                        history.goBack();
 
                     } else {
                         alert(message);
                         setAssignedItemsData([]);
+                        setLoading(false);
                     }
                 })
         } else {
-            alert('Error')
+            alert('Please find the items to be assigned')
         }
     }
     return(
         <div className="assign-to-customer-container">
             <Navbar title='Assign price'/>
             <div className="container">
-                <div className="dispatches-option-sec assign-price-option-sec">
-                    <div className="assign-price-select-sec">
-                        <div className="assign-price-option-text">
-                            <p>Select a client</p>
+                {loading ? <Loader/> : 
+                    <div className="dispatches-option-sec assign-price-option-sec">
+                        <div className="assign-price-select-sec">
+                            <div className="assign-price-option-text">
+                                <p>Select a client</p>
+                            </div>
+                            <div className="assign-price-option-menu">
+                                <Select 
+                                    options={clientsList}
+                                    className="assign-price-input-select" 
+                                    onChange={ (item, index) => onClientSelect(item) }
+                                    // value={{ value: currentOption, label: currentOption }}                                                   
+                                />
+                            </div>
                         </div>
-                        <div className="assign-price-option-menu">
-                            <Select 
-                                options={clientsList}
-                                className="assign-price-input-select" 
-                                onChange={ (item, index) => onClientSelect(item) }
-                                // value={{ value: currentOption, label: currentOption }}                                                   
-                            />
+                        <div className="assign-price-find-btn">
+                            <button 
+                                className="btn btn-primary dispatches-assign-btn" 
+                                type="submit"
+                                onClick={() => onFindItems()}
+                                >
+                                <p>Find items</p>
+                                <i className="fas fa-arrow-right" style={{ marginLeft: 10 }}></i>
+                            </button>
                         </div>
-                    </div>
-                    <div className="assign-price-find-btn">
-                         <button 
-                            className="btn btn-primary dispatches-assign-btn" 
-                            type="submit"
-                            onClick={() => onFindItems()}
-                            >
-                            <p>Find items</p>
-                            <i className="fas fa-arrow-right" style={{ marginLeft: 10 }}></i>
-                        </button>
-                    </div>
                     
-                </div>
-
-                <div className="assign-price-content" 
-                    style={{display: assignedItemsData.length !== 0 ? 'block' : 'none'}}>
-                    <div className="assign-price-item-label-sec">
-                        <div className="assign-price-item">
-                            <p>Item</p>
-                        </div>
-                        <div className="assign-price-item">
-                            <p>Price/BN</p>
-                        </div>
-                        <div className="assign-price-item">
-                            <p>QTY Transport</p>                            
-                        </div>
-                        <div className="assign-price-item">
-                            <p>Total</p>
-                        </div>
                     </div>
-                   
+                }
+                
+                {loading ? <loader/> : 
+                    <div className="assign-price-content" 
+                        style={{display: assignedItemsData.length !== 0 ? 'block' : 'none'}}>
+                        <div className="assign-price-item-label-sec">
+                            <div className="assign-price-item">
+                                <p>Item</p>
+                            </div>
+                            <div className="assign-price-item">
+                                <p>Price/BN</p>
+                            </div>
+                            <div className="assign-price-item">
+                                <p>QTY Transport</p>                            
+                            </div>
+                            <div className="assign-price-item">
+                                <p>Total</p>
+                            </div>
+                        </div>
+                
                         {assignedItemsData && assignedItemsData.map((item, index) => {
                             return(
                                 <div className="assign-price-item-sec" key={index}>
@@ -338,11 +352,14 @@ const AssignPrice = (props) => {
                                 </div>
                             )
                         })}                                                        
-                </div>
+                    </div>
+                }
+
+                
 
                 <div className="assign-price-item-sec assign-price-total"
-                    style={{display: assignedItemsData.length !== 0 ? 'block' : 'none'}}>
-                        <h4>TOTAL : { totalPrice != null ? `${totalPrice} ₹` : '--' }</h4>
+                    style={{display: assignedItemsData.length !== 0 ? 'flex' : 'none'}}>
+                        <h4>TOTAL : { totalPrice != null ? <span style={{color: 'green'}}>{totalPrice} ₹</span> : '--' }</h4>
                 </div>
 
                 <div className="dispatch-footer">

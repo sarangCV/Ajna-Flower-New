@@ -15,7 +15,7 @@ function Modal({ setOpenModal, modalConfirm, description }) {
           </button>
         </div>
         <div className="title">
-          <h1>Are You Sure You Want to Continue?</h1>
+          <h3>Are You Sure You Want to Continue?</h3>
         </div>
         <div className="body">
           <p>{description}</p>
