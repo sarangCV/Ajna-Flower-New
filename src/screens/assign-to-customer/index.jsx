@@ -271,7 +271,7 @@ const AssignToCustomer = () => {
                             <div className="container">
                                 <div className="row d-flex justify-content-center">
                                 <div className="col-6 d-flex flex-column align-items-end">
-                                        <button type="button" className="btn btn-primary " onClick={() => history.goBack()}><i className="fas fa-plus" style={{ marginRight: 10 }}></i>Done</button>
+                                        <button type="button" className="btn btn-primary " onClick={() => history.goBack()}><i class="fas fa-angle-double-right" style={{ marginRight: 10 }}></i>Done</button>
                                     </div>
                                     <div className="col-6">
                                         <button type="button" className="btn btn-secondary" onClick={confirmItems}><i className="fas fa-check" style={{ marginRight: 10 }}></i>Submit</button>
