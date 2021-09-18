@@ -11,3 +11,9 @@
     margin: 0;
     color: #fff;
 }
+
+@media only screen and (max-width: 475px) {
+    .navbar-container {
+        margin-bottom: 10px;
+    }
+}

@@ -12,3 +12,19 @@
     cursor: pointer;
     background-color: #fff;
 }
+.card-container p{
+    margin-top: 10px;
+}
+
+@media (min-width: 900px) {
+    .card-container:hover {
+        background-color: #6c757d !important;
+        transition: 0.5s;
+    }
+
+    .card-container:hover p, .card-container:hover h3 {
+        color: #fff !important;
+        transition: 0.5s;
+
+    }
+}

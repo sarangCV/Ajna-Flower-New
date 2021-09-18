@@ -35,7 +35,6 @@
 
 .assign-items-single {
     cursor: pointer;
-    padding: 10px 0 0 0;
 }
 .assigned-items-single {
     border: 1px solid #0D6EFD;
@@ -52,6 +51,9 @@
     }
     .assign-customer-item-name {
         align-items: center;
+    }
+    .assign-customer-item-name p {
+        margin-bottom: 7px;
     }
     .assign-customer-item-name p:last-child {
         margin-bottom: 0;

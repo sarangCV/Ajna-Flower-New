@@ -12,13 +12,16 @@ function Dashboard() {
                     <div className="dashboard-content">
                         <Card
                             title="Add Dispatch"
-                            navigate='/add-dispatch'/>
+                            navigate='/add-dispatch'
+                            description= 'Add dispatch items'/>
                         <Card
                             title="Dispacthes"
-                            navigate='/dispatches'/>
+                            navigate='/dispatches'
+                            description= 'View and manage dispatches'/>
                         <Card
                             title="Add Customer"
-                            navigate='/add-customer'/>
+                            navigate='/add-customer'
+                            description= 'Add a new customer'/>
                     </div>
                 </div>
             </div>

@@ -106,20 +106,20 @@ const Dispatches = () => {
                         return (
                             <div className="row" key={id}>
                                 <div className="container">
-                                    <div className="dispatch-single-desk" style={{ border: currentOption == 'Available' ? 'none' : '1px solid #286928' }}>
+                                    <div className="dispatch-single-desk" style={{ backgroundColor: currentOption == 'Available' ? '#fff' : '#83ab83', border: currentOption == 'Available' ? 'none' : '1px solid #286928' }}>
                                         <div className="dispatches-date">
-                                            <p >{moment(time).format('Do')}</p>
-                                            <p >{moment(time).format('MMMM')}</p>
+                                            <p style={{ color: currentOption == 'Available' ? '#000' : 'rgb(0 0 0 / 75%)' }} >{moment(time).format('Do')}</p>
+                                            <p style={{ color: currentOption == 'Available' ? '#000' : 'rgb(0 0 0 / 75%)' }}>{moment(time).format('MMMM')}</p>
                                         </div>
                                         <div className="dispatches-boxes">
-                                            <p >Boxes</p>
+                                            <p style={{ color: currentOption == 'Available' ? '#000' : 'rgb(0 0 0 / 75%)' }}>Boxes</p>
                                         </div>
                                         <div className="dispatches-action">
                                             <button 
                                                 className="btn btn-primary dispatches-assign-btn" 
                                                 type="submit"
                                                 onClick={() => assignItems(id, assigned, time)}
-                                                style={{ backgroundColor: currentOption == 'Available' ? '#0d6efd' : '#286928', borderColor: currentOption == 'Available' ? 'none' : '#286928' }}>
+                                                style={{ backgroundColor: currentOption == 'Available' ? '#0d6efd' : '#396739', borderColor: currentOption == 'Available' ? 'none' : '#396739' }}>
                                                 <p >{currentOption == 'Available' ? ' Assign boxes to customer' : 'Assign price'}</p>
                                                 <i className="fas fa-arrow-right" style={{ marginLeft: 10 }}></i>
                                             </button>

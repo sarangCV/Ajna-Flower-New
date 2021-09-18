@@ -93,4 +93,10 @@
     .dispatches-option-menu {
         flex: 1;
     }
+    .dispatches-date {
+        flex-direction: row;
+    }
+    .dispatches-date p {
+        padding: 0 5px;
+    }
 }

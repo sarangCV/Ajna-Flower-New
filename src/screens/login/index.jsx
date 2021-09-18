@@ -22,20 +22,21 @@ const Login = () => {
     const onSubmit = async (e) => {
         // history.push('/add-dispatch')
         e.preventDefault();
-        await setIsLoading(true)
+        setIsLoading(true)
         await validateUser(email, password)
         .then((res) => {
             const {success, userData} = res;
             if(success) {
+                setIsLoading(false);
                 window.sessionStorage.setItem(authTokenKey, userData.userToken)
                 window.sessionStorage.setItem(authDataKey, userData)
                 history.push('/dashboard')
             }
             else {
-                setError(res.message)
+                setError(res.message);
+                setIsLoading(false);
             }
         })
-        .then(setIsLoading(false))
     }
 
     return (
