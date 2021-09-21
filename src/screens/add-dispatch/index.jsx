@@ -11,6 +11,7 @@ import moment from 'moment';
 import { dispatchData } from '../../api/dispatch';
 
 import Navbar from '../../components/nav-bar';
+import Loader from '../../components/loader';
 
 moment.locale('en-IN');
 
@@ -39,6 +40,7 @@ const AddDispatchScreen = () => {
         getItemsList(token).then((res) => {
             const {success, categoriesList} = res;
             if (success) {
+                setLoading(false);
                 setCategories(categoriesList)
                 let dispatchItems = []
                 categoriesList.map((val) => {
@@ -215,73 +217,34 @@ const AddDispatchScreen = () => {
     return(
         <div className="dispatch-container">
             <Navbar title='Add a dispatch'/>
-            <div className="container">
-                <div className="dispatch-content">
-                    <div className="row">
-                        <div className="dispatch-date-section">
-                            <div className="col-lg-3 col-sm-12">
-                                <div className="dispatch-date">
-                                    <h5>Choose a Date</h5>
-                                    <DatePicker
-                                        onChange={(date)=> {setDate(date)}}
-                                        value={date}
-                                        className="date-picker"  
-                                        // formatLongDate={(locale, date) => formatDate(date, 'yyyy-mmm-dd')}                  
-                                    />   
+            {loading ? <Loader loading={loading}/> : 
+                <div className="container">
+                    <div className="dispatch-content">
+                        <div className="row">
+                            <div className="dispatch-date-section">
+                                <div className="col-lg-3 col-sm-12">
+                                    <div className="dispatch-date">
+                                        <h5>Choose a Date</h5>
+                                        <DatePicker
+                                            onChange={(date)=> {setDate(date)}}
+                                            value={date}
+                                            className="date-picker"  
+                                            // formatLongDate={(locale, date) => formatDate(date, 'yyyy-mmm-dd')}                  
+                                        />   
+                                    </div>
                                 </div>
+                                
                             </div>
-                            
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="dispatch-box-section">
-                            {dispatches.map((item) => {
-                                return(
-                                    <div className="single-box-section" key={item.id}>
-                                        <div className="row inner-dispatch-box">
-                                                <div className="col-1">
-                                                    <div className="dispatch-id-section">
-                                                        <p>{item.id}</p>
-                                                    </div>
-                                                </div>
-                                                <div className="col-4">
-                                                    <div className="dispatch-item-name-section">
-                                                        <Select 
-                                                            options={dispatchItemsList}
-                                                            className="dispatch-input-select"
-                                                            onChange={ (itemVal, itemIndex, isParent=true ) => {itemNameHandler(item, itemVal, isParent)} }
-                                                            value={{ value: item.items[0].name, label: item.items[0].name }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="col-4">
-                                                    <div className="dispatch-item-quantity-section">
-                                                        <input 
-                                                            type="text" 
-                                                            placeholder="Enter qty" 
-                                                            className="form-control" 
-                                                            aria-label="Small" 
-                                                            aria-describedby="inputGroup-sizing-sm"
-                                                            onChange={ (itemVal, itemIndex, isParent=true ) => {itemQuantityHandler(item, itemVal, isParent)} }
-                                                            value={item.items[0].qty}
-                                                            />
-                                                    </div>
-                                                </div>
-                                                <div className="col-3">
-                                                    <div className="dispatch-icon-section">
-                                                        <p>Delete</p>
-                                                        <i className="far fa-trash-alt" style={{fontSize: "20px"}} onClick={() => deleteBoxes(item)}></i>
-                                                        <p>Duplicate</p>
-                                                        <i className="far fa-clone" style={{fontSize: "20px"}} onClick={() => duplicateBoxes(item)}></i>
-                                                    </div>
-                                                </div>
-                                        </div>
-                                        {item ? item.items.slice(1).map((val) =>{
-                                            return(
-                                                <div className="row inner-dispatch-box" key={val.id}>
+                        <div className="row">
+                            <div className="dispatch-box-section">
+                                {dispatches.map((item) => {
+                                    return(
+                                        <div className="single-box-section" key={item.id}>
+                                            <div className="row inner-dispatch-box">
                                                     <div className="col-1">
                                                         <div className="dispatch-id-section">
-                                                            <p></p>
+                                                            <p>{item.id}</p>
                                                         </div>
                                                     </div>
                                                     <div className="col-4">
@@ -289,8 +252,8 @@ const AddDispatchScreen = () => {
                                                             <Select 
                                                                 options={dispatchItemsList}
                                                                 className="dispatch-input-select"
-                                                                onChange={ (itemVal, itemIndex, isParent=false ) => {itemNameHandler(item, itemVal, isParent,val )} }
-                                                                value={{ value: val.name, label: val.name }}
+                                                                onChange={ (itemVal, itemIndex, isParent=true ) => {itemNameHandler(item, itemVal, isParent)} }
+                                                                value={{ value: item.items[0].name, label: item.items[0].name }}
                                                             />
                                                         </div>
                                                     </div>
@@ -302,42 +265,83 @@ const AddDispatchScreen = () => {
                                                                 className="form-control" 
                                                                 aria-label="Small" 
                                                                 aria-describedby="inputGroup-sizing-sm"
-                                                                onChange={ (itemVal, itemIndex, isParent=false ) => {itemQuantityHandler(item, itemVal, isParent,val )} }
-                                                                value={val.qty}
+                                                                onChange={ (itemVal, itemIndex, isParent=true ) => {itemQuantityHandler(item, itemVal, isParent)} }
+                                                                value={item.items[0].qty}
                                                                 />
                                                         </div>
                                                     </div>
                                                     <div className="col-3">
-                                                        
+                                                        <div className="dispatch-icon-section">
+                                                            <p>Delete</p>
+                                                            <i className="far fa-trash-alt" style={{fontSize: "20px"}} onClick={() => deleteBoxes(item)}></i>
+                                                            <p>Duplicate</p>
+                                                            <i className="far fa-clone" style={{fontSize: "20px"}} onClick={() => duplicateBoxes(item)}></i>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            )
-                                        }) : null                                                                                                                                                                                                                                                                                                                                                                                                          }
-                                        
-                                    </div>
-                                )
-                            })}
-                           
-                        </div>
-                    </div>
-                </div>
-
-                <div className="dispatch-footer">
-                    <div className="button-container">
-                        <div className="container">
-                            <div className="row d-flex justify-content-center">
-                                <div className="col-6 d-flex flex-column align-items-end">
-                                    <button type="button" className="btn btn-primary " onClick={addBoxes}><i className="fas fa-plus" style={{ marginRight: 10 }}></i>Add box</button>
-                                </div>
-                                <div className="col-6">
-                                    <button type="button" className="btn btn-secondary" onClick={submit}><i className="fas fa-check" style={{ marginRight: 10 }}></i>Submit</button>
-                                </div>
+                                            </div>
+                                            {item ? item.items.slice(1).map((val) =>{
+                                                return(
+                                                    <div className="row inner-dispatch-box" key={val.id}>
+                                                        <div className="col-1">
+                                                            <div className="dispatch-id-section">
+                                                                <p></p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-4">
+                                                            <div className="dispatch-item-name-section">
+                                                                <Select 
+                                                                    options={dispatchItemsList}
+                                                                    className="dispatch-input-select"
+                                                                    onChange={ (itemVal, itemIndex, isParent=false ) => {itemNameHandler(item, itemVal, isParent,val )} }
+                                                                    value={{ value: val.name, label: val.name }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-4">
+                                                            <div className="dispatch-item-quantity-section">
+                                                                <input 
+                                                                    type="text" 
+                                                                    placeholder="Enter qty" 
+                                                                    className="form-control" 
+                                                                    aria-label="Small" 
+                                                                    aria-describedby="inputGroup-sizing-sm"
+                                                                    onChange={ (itemVal, itemIndex, isParent=false ) => {itemQuantityHandler(item, itemVal, isParent,val )} }
+                                                                    value={val.qty}
+                                                                    />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-3">
+                                                            
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }) : null                                                                                                                                                                                                                                                                                                                                                                                                          }
+                                            
+                                        </div>
+                                    )
+                                })}
+                            
                             </div>
                         </div>
-                        
+                    </div>
+
+                    <div className="dispatch-footer">
+                        <div className="button-container">
+                            <div className="container">
+                                <div className="row d-flex justify-content-center">
+                                    <div className="col-6 d-flex flex-column align-items-end">
+                                        <button type="button" className="btn btn-primary " onClick={addBoxes}><i className="fas fa-plus" style={{ marginRight: 10 }}></i>Add box</button>
+                                    </div>
+                                    <div className="col-6">
+                                        <button type="button" className="btn btn-secondary" onClick={submit}><i className="fas fa-check" style={{ marginRight: 10 }}></i>Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
     )
 }

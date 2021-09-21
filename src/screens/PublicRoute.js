@@ -2,16 +2,16 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { authTokenKey } from '../configuration';
 
-const PrivateRoute = ({children, ...rest}) => {
+const PublicRoute = ({children, ...rest}) => {
     return(
         
-        <Route {...rest} render={(props) => 
+        <Route {...rest} render={() => 
             sessionStorage.getItem(authTokenKey) ? (
-                children
+                <Redirect to={{ pathname: '/dashboard'}}/>
                 ) : (
-                    <Redirect to={{ pathname: '/', state: {from: props.location} }}/>
+                        children
                 )}/>
     )
 }
 
-export default PrivateRoute;
+export default PublicRoute;

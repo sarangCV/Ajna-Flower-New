@@ -1,10 +1,10 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import './style.css'
 // import loginImg from '../../assests/login-background.jpg'
 import {icon} from '../../assests/icons/index'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Redirect } from 'react-router-dom'
 import { validateUser } from '../../api/auth'
 import { authDataKey, authTokenKey } from '../../configuration'
 
@@ -18,6 +18,10 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    useEffect(() => {
+        const isLogged = window.sessionStorage.getItem(authTokenKey);
+        isLogged ? history.push('/dashboard') : (<Redirect to={'/'}/>)
+    }, [])
 
     const onSubmit = async (e) => {
         // history.push('/add-dispatch')

@@ -14,12 +14,14 @@ import AssignPrice from './screens/assign-price';
 
 // Importing PrivateRoute component
 import PrivateRoute from './screens/PrivateRoute'
+import PublicRoute from './screens/PublicRoute';
 
 function Router() {
     return (
         <BrowserRouter>
             <Switch>
                 <Route exact path="/" component={Login}/>
+                {/* <PublicRoute path={"/"}><Login/></PublicRoute> */}
                 <PrivateRoute path={"/dashboard"}><Dashboard/></PrivateRoute>
                 {/* DISPATCH */}
                 <PrivateRoute path={"/dispatches"}><Dispatches/></PrivateRoute>
@@ -30,6 +32,9 @@ function Router() {
                 <PrivateRoute path={"/assign-to-customer/:id"}><AssignToCustomer/></PrivateRoute>
                 <PrivateRoute path={"/assign-price/:id/:time"}><AssignPrice/></PrivateRoute>
                 <PrivateRoute path={"/add-customer"}><AddCustomer/></PrivateRoute>
+
+                {/* ERROR */}
+                <Route path="*" component={() => "404 NOT FOUND"}/>
 
             </Switch>
         </BrowserRouter>
